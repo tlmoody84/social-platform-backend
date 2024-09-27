@@ -1,7 +1,9 @@
 import express from 'express';
+import postsRouter from './api/posts'; 
 
 const app = express();
 app.use(express.json());
+app.use('/api/posts', postsRouter);
 
 app.get('/', (req, res) => {
   res.send('Welcome To My Social Platform!');
