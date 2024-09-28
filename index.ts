@@ -2,7 +2,7 @@ import express from 'express';
 import { createClient } from '@supabase/supabase-js';
 import postsRouter from './src/api/posts'; 
 import commentsRouter from './src/api/comment'; 
-
+import 'dotenv/config';
 
 const app = express();
 const PORT = process.env.PORT || 4001;

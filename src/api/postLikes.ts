@@ -7,7 +7,7 @@ export const addLikeToPost = async (req: Request, res: Response) => {
     const { id: postId } = req.params; 
 
     const { data: post, error: postError } = await supabase
-        .from('Post')
+        .from('post')
         .select('id')
         .eq('id', postId)
         .single();
@@ -17,7 +17,7 @@ export const addLikeToPost = async (req: Request, res: Response) => {
     }
 
     const { data, error } = await supabase
-        .from('PostLike')
+        .from('postlike')
         .insert([{ PostID: postId, CommentID: null }])
         .select();
 
@@ -42,7 +42,7 @@ export const addLikeToComment = async (req: Request, res: Response) => {
     }
 
     const { data, error } = await supabase
-        .from('PostLike')
+        .from('postlike')
         .insert([{ PostID: comment.PostID, CommentID: commentId }]) 
         .select();
 

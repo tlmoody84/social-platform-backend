@@ -9,7 +9,7 @@ router.post('/:id', validateContent, async (req: Request<{ id: string }, any, { 
     const { content } = req.body; 
 
     const { data: postExists, error: postError } = await supabase
-        .from('Post')
+        .from('post')
         .select('id')
         .eq('id', id)
         .single();
