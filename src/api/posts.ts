@@ -1,41 +1,41 @@
-// import { Router, Request, Response } from 'express';
-// import { supabase } from '../../supabaseClient';
-// import { validateContent
+import { Request, Response, Router } from 'express';
+import { supabase } from '../db/supabase'; 
+import validateContent from '../middleware/validateContent';
 
-  
-//  } from './middleware/validateContent';
-// interface Post {
-//   id: number;  
-//   content: string;
-//   timestamp: string; 
-// }
+const router = Router(); 
 
-// const router = Router();
-
-// router.post('/posts', validateContent, async (req: Request, res: Response): Promise<void> => {
-//   try {
+// router.post('/', validateContent, async (req: Request, res: Response): Promise<void> => {
 //     const { content } = req.body;
 
-//     const { data, error } = await supabase
-//       .from('Post') 
-//       .insert([{ content, timestamp: new Date().toISOString() }]); 
-
-//     if (error) {
-//       res.status(500).json({ error: error.message });
-//       return; 
+//     if (!content || typeof content !== 'string' || content.trim() === '') {
+//         res.status(400).json({ message: 'Content is required and must be a non-empty string.' });
+//         return;
 //     }
 
-//     router.post('/', async (req: Request, res: Response): Promise<void> => {
-//       const { content } = req.body;
-//       res.status(201).json({ message: "Post created!" });
-//   });
+//     const { data, error } = await supabase
+//         .from('Post')
+//         .insert([{ content }])
+//         .select(); 
 
+//     if (error) {
+//         res.status(500).json({ message: error.message });
+//         return;
+//     }
 
-//     res.status(201).json(data);
-//   } catch (error: any) {
-//     console.error("Error creating post:", error); 
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
+//     res.status(201).json({ message: 'Post created successfully', post: data });
+// });
+
+// router.get('/', async (req: Request, res: Response): Promise<void> => {
+//     const { data, error } = await supabase
+//         .from('Post')
+//         .select('*');
+
+//     if (error) {
+//         res.status(500).json({ message: error.message });
+//         return;
+//     }
+
+//     res.status(200).json(data);
 // });
 
 // export default router;
@@ -47,34 +47,25 @@
 
 
 
-import { Router, Request, Response } from 'express';
-import { supabase } from '../../supabaseClient';
-import { validateContent
-
-  
-  } from './middleware/validateContent';
-
-const router = Router();
-
-// Create a new post
 router.post('/', validateContent, async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { content } = req.body;
+    const { content } = req.body;
 
+    try {
         const { data, error } = await supabase
-            .from('Post') 
-            .insert([{ content, timestamp: new Date().toISOString() }]); 
+            .from('Post')
+            .insert([{ content }])
+            .select(); 
 
         if (error) {
-            res.status(500).json({ error: error.message });
-            return;
+            console.error('Error inserting post:', error);
+            console.error('Full error response:', JSON.stringify(error, null, 2));
+            res.status(500).json({ message: error.message || 'Failed to create post' });
+            return;  
         }
 
-        res.status(201).json(data);
-    } catch (error: any) {
-        console.error("Error creating post:", error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(201).json({ message: 'Post created successfully', post: data });
+    } catch (err) {
+        console.error('Unexpected error:', err);
+        res.status(500).json({ message: 'An unexpected error occurred' });
     }
 });
-
-export default router;

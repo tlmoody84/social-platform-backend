@@ -5,7 +5,7 @@ import commentsRouter from './src/api/comment';
 
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4001;
 
 app.use(express.json()); 
 
