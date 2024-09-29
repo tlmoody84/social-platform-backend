@@ -1,16 +1,12 @@
-
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "dist/server.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/dist/server.js"
-      }
-    ]
+  "compilerOptions": {
+    "outDir": "./api",
+    "target": "es2016", 
+    "module": "commonjs",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true, 
+    "strict": true, 
+    "skipLibCheck": true                                
   }
+}
