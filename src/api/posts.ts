@@ -2,12 +2,11 @@ import { Request, Response, Router } from 'express';
 import { supabase } from '../db/supabase';
 import validateContent from '../middleware/validateContent';
 const router = Router();
-// Fetch posts along with their comments and likes
+
 router.get('/', async (req: Request, res: Response): Promise<void> => {
     try {
-        // Fetch posts with related comments
         const { data: posts, error } = await supabase
-            .from('post')  // Ensure table name matches the actual schema
+            .from('post')  
             .select(`
                 *,
                 comment (*)
@@ -17,17 +16,17 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
             res.status(500).json({ message: error.message || 'Failed to fetch posts' });
             return;
         }
-        // Fetch like counts separately for each post
+       
         for (const post of posts) {
             const { count: likeCount, error: likeCountError } = await supabase
                 .from('postlike')
-                .select('id', { count: 'exact', head: true })  // Use head: true to get the count
-                .eq('postid', post.id);  // Use lowercase for the column name
+                .select('id', { count: 'exact', head: true })  
+                .eq('postid', post.id);  
             if (likeCountError) {
                 console.error('Error fetching like count:', likeCountError);
-                post.like_count = 0;  // Default to 0 if there's an error
+                post.like_count = 0;  
             } else {
-                post.like_count = likeCount || 0;  // Use the count directly
+                post.like_count = likeCount || 0; 
             }
         }
         res.status(200).json(posts);
@@ -41,7 +40,7 @@ router.post('/', validateContent, async (req: Request, res: Response): Promise<v
     const { content } = req.body;
     try {
         const { data, error } = await supabase
-            .from('post')  // Ensure table name is lowercase
+            .from('post')  
             .insert([{ content }])
             .select();
         if (error) {
@@ -61,7 +60,7 @@ router.put('/:id', validateContent, async (req: Request, res: Response): Promise
     const { content } = req.body;
     try {
         const { data, error } = await supabase
-            .from('post')  // Ensure table name is lowercase
+            .from('post')  
             .update({ content })
             .eq('id', id)
             .select();
@@ -81,7 +80,7 @@ router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
         const { data, error } = await supabase
-            .from('post')  // Ensure table name is lowercase
+            .from('post')  
             .delete()
             .eq('id', id);
         if (error) {
