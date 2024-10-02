@@ -3,7 +3,7 @@ import { supabase } from '../db/supabase';
 import validateContent from '../middleware/validateContent';
 const router = Router();
 
-router.get('/', async (req: Request, res: Response): Promise<void> => {
+router.get('/', async (_req: Request, res: Response): Promise<void> => {
     try {
         const { data: posts, error } = await supabase
             .from('post')  
