@@ -1,9 +1,10 @@
 import { Request, Response, Router } from 'express';
 import { supabase } from '../db/supabase';
 import validateContent from '../middleware/validateContent';
+
 const router = Router();
 
-router.get('/', async (_req: Request, res: Response): Promise<void> => {
+router.get('/', async (req: Request, res: Response): Promise<void> => {
     try {
         const { data: posts, error } = await supabase
             .from('post')  
@@ -35,7 +36,6 @@ router.get('/', async (_req: Request, res: Response): Promise<void> => {
         res.status(500).json({ message: 'An unexpected error occurred' });
     }
 });
-// Create a new post
 router.post('/', validateContent, async (req: Request, res: Response): Promise<void> => {
     const { content } = req.body;
     try {
@@ -54,7 +54,6 @@ router.post('/', validateContent, async (req: Request, res: Response): Promise<v
         res.status(500).json({ message: 'An unexpected error occurred' });
     }
 });
-// Update a post by ID
 router.put('/:id', validateContent, async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { content } = req.body;
@@ -75,7 +74,6 @@ router.put('/:id', validateContent, async (req: Request, res: Response): Promise
         res.status(500).json({ message: 'An unexpected error occurred' });
     }
 });
-// Delete a post by ID
 router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {

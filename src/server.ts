@@ -10,8 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 4001;
 
 app.use(cors({
-  origin: 'http://localhost:3000', 
-  methods: ['GET', 'POST'], 
+  origin: ['http://localhost:3000', 'https://social-platform-frontend-19gc8j1me-tlmoody84s-projects.vercel.app'], // Add your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true 
 }));
 
